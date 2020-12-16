@@ -70,6 +70,7 @@ ios-build-and-publish: &ios-build-and-publish
         name: Fastlane build for AppCenter
         command: bundle exec fastlane ios release
         working_directory: ios
+        no_output_timeout: 90m
 
 jobs:
   ios-build-and-publish-feature:
