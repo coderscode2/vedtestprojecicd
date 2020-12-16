@@ -35,7 +35,7 @@ platform :ios do
       scheme: "vedtestprojecicd",
       export_options: {
         signingStyle: "manual",
-        "org.reactjs.native.example.vedtestprojecicd" => "match AppStore org.reactjs.native.example.vedtestprojecicd 1608150926"
+        "org.reactjs.native.example.vedtestprojecicd" => "match AppStore org.reactjs.native.example.vedtestprojecicd"
       }
     )
     build_app(workspace: "vedtestprojecicd.xcworkspace", scheme: "vedtestprojecicd")
