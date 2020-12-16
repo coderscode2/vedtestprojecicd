@@ -1,0 +1,88 @@
+version: 2.1
+orbs:
+  slack: circleci/slack@4.1.3
+    
+ios-build-and-publish: &ios-build-and-publish
+  macos:
+    xcode: "11.1.0"
+  working_directory: ~/project
+  environment:
+    FASTLANE_LANE: build_for_appcenter
+    APP_NAME: GeneracHome-iOS
+    SCHEME: GeneracHome
+  shell: /bin/bash --login -o pipefail
+  steps:
+    - checkout
+    - restore_cache:
+        name: Checking if cache exists for previous yarn install and then restore
+        key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+    - restore_cache:
+        name: Checking if package json has change since previous install
+        key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+    - run: yarn install
+    - save_cache:
+        name: Saving yarn cache
+        key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+        paths:
+          - ~/.cache/yarn
+    - save_cache:
+        key: node-v1-{{ checksum "package.json" }}-{{ arch }}
+        paths:
+          - node_modules
+    - restore_cache:
+        name: Checking if cache exists for previous pod install and then restore
+        key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
+    - run:
+        command: pod install
+        working_directory: ios
+    - save_cache:
+          key: pods-v1-{{ checksum "ios/Podfile.lock" }}-{{ arch }}
+          paths:
+            - ios/Pods
+    - run:
+        command: sudo gem install bundler:2.1.4
+        working_directory: ios
+    # - run:
+    #     command: sudo bundle install
+    #     working_directory: ios
+    - restore_cache:
+        key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+    - run:
+        name: Set Ruby Version
+        command:  echo "ruby-2.5.6" > ~/.ruby-version
+    - run:
+        command: bundle check || bundle install --path vendor/bundle
+        working_directory: ios
+    # - run:
+    #     name: Fastlane upgrade
+    #     command: sudo bundle update fastlane
+    #     working_directory: ios
+    - save_cache:
+        key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
+        paths:
+          - ios/vendor/bundle
+    # - run:
+    #     name: Fastlane plugins upgrade
+    #     command: bundle exec fastlane update_plugins
+    #     working_directory: ios
+    - run: sudo gem install pry
+    - run:
+        name: Fastlane build for AppCenter
+        command: bundle exec fastlane ios release
+        working_directory: ios
+
+jobs:
+  ios-build-and-publish-feature:
+    <<: *ios-build-and-publish
+    environment:
+      FASTLANE_LANE: build_for_appcenter
+
+workflows:
+  version: 2
+  appcenter-build:
+    jobs:
+      - ios-build-and-publish-feature:
+          filters:
+            branches:
+              only:
+                - main 
