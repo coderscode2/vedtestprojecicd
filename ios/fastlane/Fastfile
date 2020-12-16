@@ -1,0 +1,44 @@
+# This file contains the fastlane.tools configuration
+# You can find the documentation at https://docs.fastlane.tools
+#
+# For a list of all available actions, check out
+#
+#     https://docs.fastlane.tools/actions
+#
+# For a list of all available plugins, check out
+#
+#     https://docs.fastlane.tools/plugins/available-plugins
+#
+
+# Uncomment the line if you want fastlane to automatically update itself
+# update_fastlane
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Push a new release build to the App Store"
+  lane :release do
+  create_keychain(
+      name: "test33-db",
+      password: "yellow59",
+      unlock: true
+    )
+    import_certificate(
+  certificate_path: "./certt.p12",
+  certificate_password: "yellow59",
+  keychain_name: "test33-db",
+  keychain_password: "yellow59"
+)
+    increment_build_number(xcodeproj: "vedtestprojecicd.xcodeproj")
+    match(type: "appstore")
+    gym(
+      scheme: "vedtestprojecicd",
+      export_options: {
+        signingStyle: "manual",
+        "org.reactjs.native.example.vedtestprojecicd" => "match AppStore org.reactjs.native.example.vedtestprojecicd 1608150926"
+      }
+    )
+    build_app(workspace: "vedtestprojecicd.xcworkspace", scheme: "vedtestprojecicd")
+    upload_to_app_store(skip_metadata: true, skip_screenshots: true)
+  end
+end
