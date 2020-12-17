@@ -34,7 +34,6 @@ before_all do
   keychain_name: "test33-db",
   keychain_password: "yellow59"
 )
-install_provisioning_profile(path: "./vedyodec16.mobileprovision")
   end
 
 desc "Bump build number"
@@ -75,16 +74,14 @@ desc "Bump build number"
   lane :release do
   update_devices
     increment_build_number(xcodeproj: "vedtestprojecicd.xcodeproj")
-    #WORKING BELOW TWO COMMANDS
     #match(type: "appstore")
-    #gym(scheme: "vedtestprojecicd", export_options: { signingStyle: "manual", "org.reactjs.native.example.vedtestprojecicd" => "match AppStore org.reactjs.native.example.vedtestprojecicd" })
     gym(
-      scheme: "vedtestprojecicd", 
-      export_options: 
-      { 
-        signingStyle: "manual", 
-        "org.reactjs.native.example.vedtestprojecicd" => "./vedyodec16.mobileprovision"
-        }
+      scheme: "vedtestprojecicd",
+      export_options: {
+        method: "app-store",
+        signingStyle: "manual",
+        "org.reactjs.native.example.vedtestprojecicd" => "match AppStore org.reactjs.native.example.vedtestprojecicd"
+      }
     )
     build_app(workspace: "vedtestprojecicd.xcworkspace", scheme: "vedtestprojecicd")
     #upload_to_app_store(skip_metadata: true, skip_screenshots: true)

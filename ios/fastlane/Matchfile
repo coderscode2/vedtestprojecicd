@@ -1,6 +1,6 @@
-git_url("https://github.com/coderscode2/certs-vedtestprojecicd.git")
+#git_url("https://github.com/coderscode2/certs-vedtestprojecicd.git")
 
-storage_mode("git")
+#storage_mode("git")
 
 type("development") # The default type, can be: appstore, adhoc, enterprise or development
 
