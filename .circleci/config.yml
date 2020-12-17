@@ -53,10 +53,10 @@ ios-build-and-publish: &ios-build-and-publish
     - run:
         command: bundle check || bundle install --path vendor/bundle
         working_directory: ios
-    - run:
-        name: Fastlane upgrade
-        command: sudo bundle update fastlane
-        working_directory: ios
+    # - run:
+    #     name: Fastlane upgrade
+    #     command: sudo bundle update fastlane
+    #     working_directory: ios
     - save_cache:
         key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
         paths:
