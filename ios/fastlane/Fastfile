@@ -34,7 +34,7 @@ before_all do
   keychain_name: "test33-db",
   keychain_password: "yellow59"
 )
-install_provisioning_profile(path: "./vedyodec16.mobileprovision"
+install_provisioning_profile(path: "./vedyodec16.mobileprovision")
   end
 
 desc "Bump build number"
