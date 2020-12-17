@@ -23,8 +23,19 @@ platform :ios do
 
 before_all do
     setup_circle_ci
+    create_keychain(
+      name: "test33-db",
+      password: "yellow59",
+      unlock: true
+    )
+    import_certificate(
+  certificate_path: "./certt.p12",
+  certificate_password: "yellow59",
+  keychain_name: "test33-db",
+  keychain_password: "yellow59"
+)
   end
-  
+
 desc "Bump build number"
   lane :bump_version do
     increment_build_number(
@@ -61,17 +72,7 @@ desc "Bump build number"
 
   desc "Push a new release build to the App Store"
   lane :release do
-  create_keychain(
-      name: "test33-db",
-      password: "yellow59",
-      unlock: true
-    )
-    import_certificate(
-  certificate_path: "./certt.p12",
-  certificate_password: "yellow59",
-  keychain_name: "test33-db",
-  keychain_password: "yellow59"
-)
+  update_devices
     increment_build_number(xcodeproj: "vedtestprojecicd.xcodeproj")
     match(type: "appstore")
     gym(
@@ -82,7 +83,7 @@ desc "Bump build number"
       }
     )
     build_app(workspace: "vedtestprojecicd.xcworkspace", scheme: "vedtestprojecicd")
-    upload_to_app_store(skip_metadata: true, skip_screenshots: true)
+    #upload_to_app_store(skip_metadata: true, skip_screenshots: true)
     upload_to_appcenter(
       app_name:  "vedtestprojecicd"
     )
