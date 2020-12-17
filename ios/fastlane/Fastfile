@@ -34,11 +34,7 @@ before_all do
   keychain_name: "test33-db",
   keychain_password: "yellow59"
 )
-get_provisioning_profile(
-  adhoc: false,
-  force: true,
-  filename: "./vedyodec16.mobileprovision"
-)
+install_provisioning_profile(path: "./vedyodec16.mobileprovision"
   end
 
 desc "Bump build number"
@@ -82,6 +78,14 @@ desc "Bump build number"
     #WORKING BELOW TWO COMMANDS
     #match(type: "appstore")
     #gym(scheme: "vedtestprojecicd", export_options: { signingStyle: "manual", "org.reactjs.native.example.vedtestprojecicd" => "match AppStore org.reactjs.native.example.vedtestprojecicd" })
+    gym(
+      scheme: "vedtestprojecicd", 
+      export_options: 
+      { 
+        signingStyle: "manual", 
+        "org.reactjs.native.example.vedtestprojecicd" => "./vedyodec16.mobileprovision"
+        }
+    )
     build_app(workspace: "vedtestprojecicd.xcworkspace", scheme: "vedtestprojecicd")
     #upload_to_app_store(skip_metadata: true, skip_screenshots: true)
     upload_to_appcenter(
