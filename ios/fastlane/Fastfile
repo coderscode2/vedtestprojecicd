@@ -23,17 +23,6 @@ platform :ios do
 
 before_all do
     setup_circle_ci
-    create_keychain(
-      name: "test33-db",
-      password: "yellow59",
-      unlock: true
-    )
-    import_certificate(
-  certificate_path: "./certt.p12",
-  certificate_password: "yellow59",
-  keychain_name: "test33-db",
-  keychain_password: "yellow59"
-)
   end
 
 desc "Bump build number"
@@ -74,11 +63,10 @@ desc "Bump build number"
   lane :release do
   update_devices
     increment_build_number(xcodeproj: "vedtestprojecicd.xcodeproj")
-    #match(type: "appstore")
+    match(type: "appstore")
     gym(
       scheme: "vedtestprojecicd",
       export_options: {
-        method: "app-store",
         signingStyle: "manual",
         "org.reactjs.native.example.vedtestprojecicd" => "match AppStore org.reactjs.native.example.vedtestprojecicd"
       }
