@@ -42,9 +42,9 @@ ios-build-and-publish: &ios-build-and-publish
     - run:
         command: sudo gem install bundler:2.1.4
         working_directory: ios
-    - run:
-        command: sudo bundle install
-        working_directory: ios
+    # - run:
+    #     command: sudo bundle install
+    #     working_directory: ios
     - restore_cache:
         key: bundle-v1-{{ checksum "ios/Gemfile.lock" }}-{{ arch }}
     - run:
