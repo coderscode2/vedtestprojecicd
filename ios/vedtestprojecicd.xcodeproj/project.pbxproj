@@ -660,7 +660,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = HZBSJ74C23;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = vedtestprojecicd/Info.plist;
@@ -672,7 +672,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.vedtestprojecicd;
 				PRODUCT_NAME = vedtestprojecicd;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore org.reactjs.native.example.vedtestprojecicd 1608150926";
+				PROVISIONING_PROFILE_SPECIFIER = "org.reactjs.native.example.vedtestprojecicd AppStore";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -687,7 +687,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 12;
+				CURRENT_PROJECT_VERSION = 17;
 				DEVELOPMENT_TEAM = HZBSJ74C23;
 				INFOPLIST_FILE = vedtestprojecicd/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -698,7 +698,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.vedtestprojecicd;
 				PRODUCT_NAME = vedtestprojecicd;
-				PROVISIONING_PROFILE_SPECIFIER = "match AppStore org.reactjs.native.example.vedtestprojecicd 1608150926";
+				PROVISIONING_PROFILE_SPECIFIER = "org.reactjs.native.example.vedtestprojecicd AppStore";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
