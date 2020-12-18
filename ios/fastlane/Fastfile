@@ -1,81 +1,74 @@
-# This file contains the fastlane.tools configuration
-# You can find the documentation at https://docs.fastlane.tools
-#
-# For a list of all available actions, check out
-#
-#     https://docs.fastlane.tools/actions
-#
-# For a list of all available plugins, check out
-#
-#     https://docs.fastlane.tools/plugins/available-plugins
-#
-
-# Uncomment the line if you want fastlane to automatically update itself
-# update_fastlane
-
 default_platform(:ios)
+KEYCHAIN_PASSWORD="Vedyo1234@"
+CERTIFICATE_PASSWORD="Yellow59@"
 owner_name="veda59-gmail.com"
 app_name="vedcircleciproj"
 project_name="vedtestprojecicd"
 path = "./#{project_name}.xcodeproj"
-
 platform :ios do
-
-before_all do
+    before_all do
     setup_circle_ci
-    update_fastlane
-    create_keychain(
-      name: "vedyoooo",
-      password: "veddd123@",
-      default_keychain: true,
-      unlock: true
-    )
   end
+  desc "Build app"
+  lane :release do |options|
+    begin
+      setupCodeSigning(KEYCHAIN_PASSWORD, CERTIFICATE_PASSWORD, './orgreactjsnativeexamplevedtestprojecicd_AppStore.mobileprovision', './certificate.cer')
 
-desc "Bump build number"
-  lane :bump_version do
-    increment_build_number(
-      xcodeproj: path,
-      build_number: Time.now.strftime("%y%m%d%H%M") # ENV['CIRCLE_BUILD_NUM']
-    )
-  end
+      cocoapods(clean_install: true, use_bundle_exec: false, error_callback: true)
 
-  desc "Upload to AppCenter"
-  lane :upload_to_appcenter do | options |
-    appcenter_upload(
-      owner_name: owner_name,
-      app_name:  app_name
-    )
-  end
-  
-  desc "Update the devices with the ones in devices.txt"
-  lane :update_devices do
-    register_devices(
-      devices_file: "./devices.txt"
-    )
-  end
+      build_app(
+        scheme: project_name, 
+        configuration: 'Release'
+      )
 
-  desc "register a device on apple dev portal"
-  lane :register_dev_device do |options|
-    register_devices(
-      devices: {
-        options[:name] => options[:udid]
-      },
-      username: "veda59@gmail.com"
-    )
+      upload_to_testflight(
+        username: "veda59@gmail.com",
+        skip_waiting_for_build_processing: true,
+        skip_submission: true)
+
+    rescue => exception
+      on_error(options[:slackUrl], "Build Failed", "#slack-channel", exception)
+    end
   end
+end
 
 
-  desc "Push a new release build to the App Store"
-  lane :release do
-  update_devices
-    increment_build_number(xcodeproj: "vedtestprojecicd.xcodeproj")
-    cert(filename: './newcer.cer', keychain_password: "veddd123@", keychain_path: "~/Library/Keychains/vedyoooo-db")
-    sigh(force:true)
-    build_app(workspace: "vedtestprojecicd.xcworkspace", scheme: "vedtestprojecicd")
-    #upload_to_app_store(skip_metadata: true, skip_screenshots: true)
-    upload_to_appcenter(
-      app_name:  "vedtestprojecicd"
-    )
-  end
+def setupCodeSigning(keychainPassword, certificatePassword, profilePath, certificatePath)
+  create_keychain(
+    name: "CI",
+    password: keychainPassword,
+    default_keychain: true,
+    unlock: true,
+    timeout: 3600,
+    lock_when_sleeps: false
+  )
+  install_provisioning_profile(path: profilePath)
+  import_certificate(
+    certificate_path: certificatePath,
+    certificate_password: certificatePassword,
+    keychain_name: "CI",
+    keychain_password: keychainPassword
+  )
+end
+
+def on_error(slackUrl, message, channel, exception)
+  slack(
+    slack_url: slackUrl,
+    channel: channel,
+    message: "iOS App :appleinc: " + message,
+    success: false,
+    payload: {},
+    default_payloads: [],
+    attachment_properties: { # Optional, lets you specify any other properties available for attachments in the slack API (see https://api.slack.com/docs/attachments).
+      color: "#FC100D",
+      fields: [
+        {
+          title: "Error",
+          value: exception.to_s,
+        },
+      ]
+    }
+  )
+
+  raise exception
 end
