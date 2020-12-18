@@ -12,7 +12,7 @@ platform :ios do
   desc "Build app"
   lane :release do |options|
     begin
-      setupCodeSigning(KEYCHAIN_PASSWORD, CERTIFICATE_PASSWORD, './orgreactjsnativeexamplevedtestprojecicd_AppStore.mobileprovision', './certificate.cer')
+      setupCodeSigning(KEYCHAIN_PASSWORD, CERTIFICATE_PASSWORD, 'orgreactjsnativeexamplevedtestprojecicd_AppStore.mobileprovision', 'certificate.cer')
 
       cocoapods(clean_install: true, use_bundle_exec: false, error_callback: true)
 
@@ -27,7 +27,7 @@ platform :ios do
         skip_submission: true)
 
     rescue => exception
-      on_error(options[:slackUrl], "Build Failed", "#slack-channel", exception)
+      #on_error(options[:slackUrl], "Build Failed", "#slack-channel", exception)
     end
   end
 end
@@ -50,25 +50,4 @@ def setupCodeSigning(keychainPassword, certificatePassword, profilePath, certifi
     keychain_password: keychainPassword
   )
 end
-
-def on_error(slackUrl, message, channel, exception)
-  slack(
-    slack_url: slackUrl,
-    channel: channel,
-    message: "iOS App :appleinc: " + message,
-    success: false,
-    payload: {},
-    default_payloads: [],
-    attachment_properties: { # Optional, lets you specify any other properties available for attachments in the slack API (see https://api.slack.com/docs/attachments).
-      color: "#FC100D",
-      fields: [
-        {
-          title: "Error",
-          value: exception.to_s,
-        },
-      ]
-    }
-  )
-
-  raise exception
 end
