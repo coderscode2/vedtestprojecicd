@@ -13,7 +13,7 @@ platform :ios do
   desc "Build app"
   lane :release do |options|
     begin
-      setupCodeSigning(KEYCHAIN_PASSWORD, CERTIFICATE_PASSWORD, 'orgreactjsnativeexamplevedtestprojecicd_AppStore.mobileprovision', 'certificate.cer')
+      setupCodeSigning(KEYCHAIN_PASSWORD, CERTIFICATE_PASSWORD, 'orgreactjsnativeexamplevedtestprojecicd_AppStore.mobileprovision', 'ios_distribution.cer')
 
       #cocoapods(clean_install: true, use_bundle_exec: false, error_callback: true)
 
