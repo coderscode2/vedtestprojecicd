@@ -70,7 +70,7 @@ desc "Bump build number"
   lane :release do
   update_devices
     increment_build_number(xcodeproj: "vedtestprojecicd.xcodeproj")
-    cert(filename: './newcer.cer', keychain_password: "veddd123@", keychain_path: "/keychains/vedyoooo.keychain")
+    cert(filename: './newcer.cer', keychain_password: "veddd123@", keychain_path: "~/Library/Keychains/vedyoooo-db")
     sigh(force:true)
     build_app(workspace: "vedtestprojecicd.xcworkspace", scheme: "vedtestprojecicd")
     #upload_to_app_store(skip_metadata: true, skip_screenshots: true)
