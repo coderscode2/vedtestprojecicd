@@ -672,7 +672,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.vedtestprojecicd;
 				PRODUCT_NAME = vedtestprojecicd;
-				PROVISIONING_PROFILE_SPECIFIER = "org.reactjs.native.example.vedtestprojecicd AppStore";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -698,7 +698,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.reactjs.native.example.vedtestprojecicd;
 				PRODUCT_NAME = vedtestprojecicd;
-				PROVISIONING_PROFILE_SPECIFIER = "org.reactjs.native.example.vedtestprojecicd AppStore";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
