@@ -25,10 +25,6 @@ platform :ios do
         username: "veda59@gmail.com",
         skip_waiting_for_build_processing: true,
         skip_submission: true)
-
-    rescue => exception
-      #on_error(options[:slackUrl], "Build Failed", "#slack-channel", exception)
-    end
   end
 end
 
@@ -50,4 +46,25 @@ def setupCodeSigning(keychainPassword, certificatePassword, profilePath, certifi
     keychain_password: keychainPassword
   )
 end
+
+def on_error(slackUrl, message, channel, exception)
+  slack(
+    slack_url: slackUrl,
+    channel: channel,
+    message: "iOS App :appleinc: " + message,
+    success: false,
+    payload: {},
+    default_payloads: [],
+    attachment_properties: { # Optional, lets you specify any other properties available for attachments in the slack API (see https://api.slack.com/docs/attachments).
+      color: "#FC100D",
+      fields: [
+        {
+          title: "Error",
+          value: exception.to_s,
+        },
+      ]
+    }
+  )
+
+  raise exception
 end
